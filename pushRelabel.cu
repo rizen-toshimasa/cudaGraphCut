@@ -13,35 +13,35 @@ struct node{
 };
 struct node *top;
 struct node *btm;
-void enqueue(unsigned int id){
+void enqueue(struct data *data){
     struct node *node = new struct node;
-    node->id = id;
+    node->data = data;
     node->prev = NULL;
     if (top == NULL) btm = node;
     else top-> prev = node;
     node->next = top;
     top = node;
 }
-unsgined int dequeue(void){
+struct data  dequeue(void){
         struct node *node = btm;
-        unsgined int id = node->id;
+        struct data *data = node->data;
         btm = node->prev;
         if(btm ==NULL) top = NULL;
         else btm->next = NULL;
         delete node;
-        return id;
+        return *data;
 }
 int main(int argc, char** argv){
     FILE *fp;
-    char *fname
-    if(){
-    }else{
-        fname = "sample.inp";
+    const char fname[] = "sample.inp";
+    if((fp = fopen(fname,"r")) == NULL){
+        printf("ファイル読み込みエラー\n");
+        exit(EXIT_FAILURE);
     }
-    printf("the cake is a lie");
+    char str[256];
+    while(fgets(str, 256, fp) != NULL){
+        printf("%s",str);
+    }
     fclose(fp);
     return 0;
-}
-void fopenDIMACS(FILE *fp,int fSize){
-
 }
