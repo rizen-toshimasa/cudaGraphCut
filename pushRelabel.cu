@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-typedef struct _node node_t{
-    unsigned int id;//頂点ID
-    unsigned int o;//overflow
-    unsigned int h;//height
-    char flg;//Normal=0,Source=1,Sync=2
-    struct _node *next;
+struct data{
+    unsigned int o;//overflow value
+    unsigned int h;//height value
+    unsigned char f;//first flg
 };
-typedef struct _list list_t{
-    node_t head;
-    node_t tail;
+struct node{
+    struct node *next;
+    struct node *prev;
+    struct data *data;
 };
+struct node *top;
+struct node *btm;
 
-int main(int argc, char* argv){
+int main(int argc, char** argv){
     printf("the cake is a lie");
     return 0;
 }
