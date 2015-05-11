@@ -1,20 +1,24 @@
-#include <stdio'/home/toshimasa/android-studio/bin/studio.sh' .h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-typedef struct Node{
-    struct Edge *in_edge = NULL;
-    struct Edge *out_edge = NULL;
-    unsigned int flow = 0;
-    unsigned int height = 0;
-} node_t;
-typedef struct Edge{
-    struct Edge *in_next = NULL;
-    struct Edge *out_next = NULL;
-    struct Node *push = NULL;
-    struct Node *pull = NULL;
-    struct Edge *rev = NULL;
-    unsigned int flow = 0;
-} edge_t;
+struct Edge{
+    Edge(){
+        in_next = NULL; out_next = NULL; rev = NULL;
+        push = NULL; pull = NULL;
+        flow = 0;
+    }
+    struct Edge *in_next, *out_next, *rev;
+    struct Node *push, *pull;
+    unsigned int flow;
+};
+struct Node{
+    Node(){
+        in_edge = NULL; out_edge = NULL;
+        flow = 0; height = 0;
+    }
+    struct Edge *in_edge, *out_edge;
+    unsigned int flow ,height;
+};
 void Push(struct Node *node_push, struct Node *node_pull, int flow){
     struct Edge *edge = new struct Edge;
     edge->in_next = node_pull->in_edge;
@@ -25,14 +29,23 @@ void Push(struct Node *node_push, struct Node *node_pull, int flow){
     edge->push = node_push;
     edge->flow = flow;
 }
-struct Edge FindEdge(struct Node *node_push, struct Node *node_pull){
+struct Edge* FindEdge(struct Node *node_push, struct Node *node_pull){
     //エッジすでにあるかなハート
-    struct Edge edge = node_push->out_edge;
-    while(edge != NULL){
-        if(edge->pull == node_pull) return edge;
-    }
+    puts("ie");
+    printf("%p",node_push);
+    struct Edge *edge = node_push->out_edge;
+    printf("node_push->out",node_push->out_edge);
+puts("hoge");
+int i=0;
+//    while(edge != NULL){
+        printf("%d\n",i);
+        if(edge->pull == node_pull){
+            return edge;
+        }
+        edge = edge->out_next;
+        i++;
+//    }
     return NULL;//なかったわ
-    
 }
 
 int main(int argc, char** argv){
@@ -50,19 +63,28 @@ int main(int argc, char** argv){
     fscanf(fp, "n %d s", &num_src);
     fscanf(fp, "n %d t", &num_sink);
     struct Node *nodes;
-    nodes = (struct Node *)malloc(sizeof (struct Node) * node_max_num);
-    int push, pull, flow;
-    while(fscanf(fp, "a %d %d %d",&node_push, &node_pull, &flow) == NULL){
+    nodes = (struct Node *)malloc(sizeof (struct Node) * size_nodes);
+    int id_push, id_pull, flow;
+    struct Node *node_push, *node_pull;
+    struct Edge *find_edge;
+    while(fscanf(fp, "a %d %d %d",&id_push, &id_pull, &flow) != EOF){
+        puts("a");
         //NodeHoge(nodes, num_max_node, push, pull, flow);
-        if(struct Edge edge = FindEdge(node_push, node_pull)){
-            edge->pull = pull;
-            edge->push = push;
-            edge->flow = flow;
+        printf("id_push:%d pull:%d",id_push,id_pull);
+        node_push = &nodes[id_push-1];
+        node_pull = &nodes[id_pull-1];
+        puts("hoge");
+        find_edge = FindEdge(node_push, node_pull);
+        puts("aho");
+        if(find_edge == NULL){
+            find_edge->pull = node_pull;
+            find_edge->push = node_push;
+            find_edge->flow = flow;
         }else{
             Push(node_push, node_pull, flow);
         }
     }
-    free(edgeArray)
+    free(nodes);
     fclose(fp);
     return 0;
 }
